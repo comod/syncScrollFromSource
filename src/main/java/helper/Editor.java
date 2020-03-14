@@ -15,6 +15,10 @@ public class Editor {
 
     public void jumpToLine(String path, Integer line) {
 
+
+        // www/module/Hausrat/src/Hausrat/BusinessObject/DamageReport.php
+        // www/module/Product/src/Product/?
+
         System.out.println("JUMP" + path + " in " + project.getName());
 //        System.out.println(project.getBaseDir());
 //        System.out.println(project.getBaseDir().findFileByRelativePath(path));

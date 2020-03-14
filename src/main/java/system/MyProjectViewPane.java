@@ -3,21 +3,16 @@ package system;
 import com.intellij.ide.SelectInTarget;
 import com.intellij.ide.impl.ProjectPaneSelectInTarget;
 import com.intellij.ide.projectView.impl.ProjectViewPane;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.messages.MessageBus;
-import helper.JavaScriptEval;
-import listener.ChangeActionNotifier;
 import listener.ChangeActionNotifierInterface;
 import org.jetbrains.annotations.NotNull;
 
 import static helper.DoubleClick.isDoubleClick;
-import static helper.JavaScriptEval.eval;
 
 class MyProjectViewPane extends ProjectViewPane {
 

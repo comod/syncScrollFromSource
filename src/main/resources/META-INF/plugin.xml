@@ -23,6 +23,20 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectViewPane implementation="system.MyProjectViewPane"/>
+
+        <!-- Data store (application level) -->
+        <applicationService
+                serviceImplementation="config.ApplicationConfig"
+        />
+
+        <!--Data Store UI -->
+        <!--<projectConfigurable-->
+        <applicationConfigurable
+                groupId="tools"
+                displayName="Synchronous Scroll From Source"
+                id="preference.MyConfigurable"
+                instance="config.Configurable"
+        />
     </extensions>
 
     <actions>

@@ -2,7 +2,6 @@ package listener;
 
 import com.intellij.openapi.project.Project;
 import helper.Editor;
-import helper.Notification;
 
 public class ChangeActionNotifier implements ChangeActionNotifierInterface {
 
