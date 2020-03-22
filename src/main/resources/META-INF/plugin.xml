@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>org.example.sync-file-pointer</id>
-    <name>Plugin display name here</name>
+    <id>syncScrollFromSource</id>
+    <name>Synchronous Scroll From Source</name>
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
