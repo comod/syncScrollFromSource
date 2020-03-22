@@ -41,6 +41,9 @@
                 id="preference.MyConfigurable"
                 instance="config.MyConfigurable"
         />
+
+        <statusBarWidgetProvider implementation="ui.MyStatusBarWidgetProvider"/>
+
     </extensions>
 
     <actions>

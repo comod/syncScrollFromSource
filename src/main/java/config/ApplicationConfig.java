@@ -13,10 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import com.intellij.util.xmlb.Converter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -31,7 +29,7 @@ import com.google.gson.reflect.TypeToken;
 public class ApplicationConfig implements PersistentStateComponent<ApplicationConfig> {
 
     @OptionTag(converter = MyPairsConverter.class)
-    public List<MyNameLocationPair> myPairs;
+    public List<MySearchReplacePair> myPairs;
     static final String NAME = Constants.APPLICATION_NAME + "ApplicationConfig";
     static final String STORAGE = Constants.APPLICATION_NAME + NAME + ".xml";
 
@@ -56,17 +54,17 @@ public class ApplicationConfig implements PersistentStateComponent<ApplicationCo
         return ServiceManager.getService(project, ApplicationConfig.class);
     }
 
-    public List<MyNameLocationPair> getMyPairs() {
+    public List<MySearchReplacePair> getMyPairs() {
         return myPairs;
     }
 
-    public void setMyPairs(List<MyNameLocationPair> myPairs) {
+    public void setMyPairs(List<MySearchReplacePair> myPairs) {
         this.myPairs = myPairs;
     }
 
 }
 
-class MyPairsConverter extends Converter<List<MyNameLocationPair>> {
+class MyPairsConverter extends Converter<List<MySearchReplacePair>> {
 
     private final Gson gson;
 
@@ -74,22 +72,18 @@ class MyPairsConverter extends Converter<List<MyNameLocationPair>> {
         gson = new Gson();
     }
 
-    public List<MyNameLocationPair> fromString(@NotNull String payload) {
+    public List<MySearchReplacePair> fromString(@NotNull String payload) {
 
         try {
-            return gson.fromJson(payload, new TypeToken<List<MyNameLocationPair>>() {}.getType());
+            return gson.fromJson(payload, new TypeToken<List<MySearchReplacePair>>() {}.getType());
         } catch (Exception err) {
             System.out.println("err" + err.getMessage());
         }
 
         return null;
-        //        // Fallback
-        //        List<MyNameLocationPair> myPairs = new ArrayList<>();
-        //        myPairs.add(new MyNameLocationPair("", ""));
-        //        return myPairs;
     }
 
-    public String toString(@NotNull List<MyNameLocationPair> payload) {
+    public String toString(@NotNull List<MySearchReplacePair> payload) {
         return gson.toJson(payload);
     }
 }

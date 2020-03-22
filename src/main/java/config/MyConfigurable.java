@@ -3,7 +3,6 @@ package config;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.ui.AddEditRemovePanel;
 import com.intellij.util.ArrayUtilRt;
 import org.jetbrains.annotations.Nullable;
@@ -17,18 +16,18 @@ import java.util.List;
 public class MyConfigurable extends BaseConfigurable implements Configurable.NoScroll {
     private final ApplicationConfig myConfig;
     private JPanel myPanel;
-    private List<MyNameLocationPair> myPairs;
+    private List<MySearchReplacePair> myPairs;
     private List<String> myIgnoredUrls;
-    private AddEditRemovePanel<MyNameLocationPair> myExtPanel;
+    private AddEditRemovePanel<MySearchReplacePair> myExtPanel;
     @Nullable private final Project myProject;
-    private final List<? extends MyNameLocationPair> myNewPairs;
+    private final List<? extends MySearchReplacePair> myNewPairs;
 
     @SuppressWarnings("UnusedDeclaration")
     public MyConfigurable(Project project) {
         this(project, Collections.emptyList());
     }
 
-    public MyConfigurable(@Nullable Project project, List<? extends MyNameLocationPair> newResources) {
+    public MyConfigurable(@Nullable Project project, List<? extends MySearchReplacePair> newResources) {
 
         myProject = project;
         myNewPairs = newResources;
@@ -52,21 +51,21 @@ public class MyConfigurable extends BaseConfigurable implements Configurable.NoS
             }
         };
 
-        myExtPanel = new AddEditRemovePanel<MyNameLocationPair>(new ExtUrlsTableModel(), myPairs,"Custom Path Resolve Map") {
+        myExtPanel = new AddEditRemovePanel<MySearchReplacePair>(new ExtUrlsTableModel(), myPairs,"Custom Path Resolve Map") {
             @Override
-            protected MyNameLocationPair addItem() {
-                return addExtLocation();
+            protected MySearchReplacePair addItem() {
+                return addExtReplace();
             }
 
             @Override
-            protected boolean removeItem(MyNameLocationPair o) {
+            protected boolean removeItem(MySearchReplacePair o) {
                 setModified(true);
                 return true;
             }
 
             @Override
-            protected MyNameLocationPair editItem(MyNameLocationPair o) {
-                return editExtLocation(o);
+            protected MySearchReplacePair editItem(MySearchReplacePair o) {
+                return editExtReplace(o);
             }
 
             @Override
@@ -101,7 +100,7 @@ public class MyConfigurable extends BaseConfigurable implements Configurable.NoS
 
         if (myPairs == null) {
             myPairs = new ArrayList<>();
-            myPairs.add(new MyNameLocationPair("", ""));
+            myPairs.add(new MySearchReplacePair("", ""));
         }
         myExtPanel.setData(myPairs);
 
@@ -119,25 +118,24 @@ public class MyConfigurable extends BaseConfigurable implements Configurable.NoS
     }
 
     @Nullable
-    private MyNameLocationPair addExtLocation() {
+    private MySearchReplacePair addExtReplace() {
         setModified(true);
-        return new MyNameLocationPair("", "");
+        return new MySearchReplacePair("", "");
     }
 
     @Nullable
-    private MyNameLocationPair editExtLocation(Object o) {
-        MyNameLocationPair pair = (MyNameLocationPair)o;
+    private MySearchReplacePair editExtReplace(Object o) {
+        MySearchReplacePair pair = (MySearchReplacePair)o;
         return pair;
     }
 
-    private class ExtUrlsTableModel extends AddEditRemovePanel.TableModel<MyNameLocationPair> {
+    private class ExtUrlsTableModel extends AddEditRemovePanel.TableModel<MySearchReplacePair> {
         final String[] myNames;
 
         {
             List<String> names = new ArrayList<>();
             names.add("Search");
             names.add("Replace");
-
             myNames = ArrayUtilRt.toStringArray(names);
         }
 
@@ -147,12 +145,12 @@ public class MyConfigurable extends BaseConfigurable implements Configurable.NoS
         }
 
         @Override
-        public Object getField(MyNameLocationPair pair, int columnIndex) {
+        public Object getField(MySearchReplacePair pair, int columnIndex) {
             switch (columnIndex) {
                 case 0:
-                    return pair.myName;
+                    return pair.mySearch;
                 case 1:
-                    return pair.myLocation;
+                    return pair.myReplace;
             }
 
             return "";
@@ -164,12 +162,12 @@ public class MyConfigurable extends BaseConfigurable implements Configurable.NoS
         }
 
         @Override
-        public void setValue(Object aValue, MyNameLocationPair data, int columnIndex) {
+        public void setValue(Object aValue, MySearchReplacePair data, int columnIndex) {
             if (columnIndex == 0) {
-                data.myName = (String) aValue;
+                data.mySearch = (String) aValue;
             }
             if (columnIndex == 1) {
-                data.myLocation = (String) aValue;
+                data.myReplace = (String) aValue;
             }
         }
 

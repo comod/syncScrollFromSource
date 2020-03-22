@@ -25,8 +25,7 @@ public class Editor {
 
         try {
 
-            VirtualFile file = project.getBaseDir().findFileByRelativePath(path);
-            System.out.println("open: " + file);
+            VirtualFile file = getVirtualFile(path);
             if (file != null && file.exists()) {
 
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -34,7 +33,7 @@ public class Editor {
                         ApplicationManager.getApplication().runReadAction(new Runnable() {
                             public void run() {
                                 System.out.println("!");
-                                new OpenFileDescriptor(project, file, line, 0, false).navigate(true);
+                                new OpenFileDescriptor(project, file, line, 0, false).navigate(false);
                             }
                         });
                     }
@@ -44,6 +43,10 @@ public class Editor {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public VirtualFile getVirtualFile(String path) {
+        return project.getBaseDir().findFileByRelativePath(path);
     }
 
 }
