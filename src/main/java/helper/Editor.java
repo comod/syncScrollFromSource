@@ -3,7 +3,13 @@ package helper;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public class Editor {
 
@@ -13,27 +19,16 @@ public class Editor {
         this.project = project;
     }
 
-    public void jumpToLine(String path, Integer line) {
-
-
-        // www/module/Hausrat/src/Hausrat/BusinessObject/DamageReport.php
-        // www/module/Product/src/Product/?
-
-        System.out.println("JUMP" + path + " in " + project.getName());
-//        System.out.println(project.getBaseDir());
-//        System.out.println(project.getBaseDir().findFileByRelativePath(path));
+    public void jumpToLine(VirtualFile virtualFile, Integer line) {
 
         try {
-
-            VirtualFile file = getVirtualFile(path);
-            if (file != null && file.exists()) {
+            if (virtualFile != null && virtualFile.exists()) {
 
                 ApplicationManager.getApplication().invokeLater(new Runnable() {
                     public void run() {
                         ApplicationManager.getApplication().runReadAction(new Runnable() {
                             public void run() {
-                                System.out.println("!");
-                                new OpenFileDescriptor(project, file, line, 0, false).navigate(false);
+                                new OpenFileDescriptor(project, virtualFile, line, 0, false).navigate(false);
                             }
                         });
                     }
@@ -41,12 +36,46 @@ public class Editor {
 
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
         }
     }
 
-    public VirtualFile getVirtualFile(String path) {
-        return project.getBaseDir().findFileByRelativePath(path);
+    @NotNull
+    public static String determineRootPath(Project project) {
+        VirtualFile[] vFiles = ProjectRootManager.getInstance(project).getContentRoots();
+        VirtualFile projectRoot = vFiles[0];
+        return projectRoot.getPath();
+    }
+
+    @NotNull
+    public static String determineRelativePath(VirtualFile virtualFile, String rootPath) {
+        String filepath = virtualFile.getCanonicalPath();
+        return filepath.replace(rootPath + "/", "");
+    }
+
+    public VirtualFile getVirtualFileByPath(String path) {
+        return this.project.getBaseDir().findFileByRelativePath(path);
+    }
+
+    public static void copyFile(VirtualFile virtualFile, String newPath) {
+
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run()
+            {
+                try {
+
+                    final VirtualFile newDir = VfsUtil.createDirectories(newPath);
+                    if(newDir != null) {
+                        VfsUtilCore.copyFile(this, virtualFile, newDir);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
 }

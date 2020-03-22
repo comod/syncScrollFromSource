@@ -5,7 +5,6 @@ import com.intellij.ide.impl.ProjectPaneSelectInTarget;
 import com.intellij.ide.projectView.impl.ProjectViewPane;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.messages.MessageBus;
@@ -37,7 +36,7 @@ class MyProjectViewPane extends ProjectViewPane {
 
                 if (isDoubleClick()) {
 
-                    String relativePath = determineRelativePath(element);
+                    VirtualFile virtualFile = determineVirtualFile(element);
 
                     ProjectManager projectManager = ProjectManager.getInstance();
                     Project[] projects = projectManager.getOpenProjects();
@@ -49,9 +48,9 @@ class MyProjectViewPane extends ProjectViewPane {
 
                         MessageBus messageBus = project.getMessageBus();
 
-                        // PUBLISH to custom listener
+                        // PUBLISH to listener
                         ChangeActionNotifierInterface publisher = messageBus.syncPublisher(ChangeActionNotifierInterface.CHANGE_ACTION_TOPIC);
-                        publisher.doAction(relativePath);
+                        publisher.doAction(myProject, virtualFile);
 
                     }
 
@@ -60,12 +59,8 @@ class MyProjectViewPane extends ProjectViewPane {
             }
 
             @NotNull
-            private String determineRelativePath(PsiElement element) {
-                String filepath = element.getContainingFile().getVirtualFile().getCanonicalPath();
-                VirtualFile[] vFiles = ProjectRootManager.getInstance(myProject).getContentRoots();
-                VirtualFile projectRoot = vFiles[0];
-                String myProjectRootPath = projectRoot.getPath();
-                return filepath.replace(myProjectRootPath + "/", "");
+            private VirtualFile determineVirtualFile(PsiElement element) {
+                return element.getContainingFile().getVirtualFile();
             }
 
         };

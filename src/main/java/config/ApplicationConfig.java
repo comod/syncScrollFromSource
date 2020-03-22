@@ -77,7 +77,7 @@ class MyPairsConverter extends Converter<List<MySearchReplacePair>> {
         try {
             return gson.fromJson(payload, new TypeToken<List<MySearchReplacePair>>() {}.getType());
         } catch (Exception err) {
-            System.out.println("err" + err.getMessage());
+            // System.out.println("err" + err.getMessage());
         }
 
         return null;
