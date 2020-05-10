@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.intellij' version '0.4.16'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'syncScrollFromSource'
+version '0.0.2'
 
 sourceCompatibility = 1.8
 
@@ -19,9 +19,12 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2019.3.3'
+    // version '2019.3.3'
+    version 'LATEST-EAP-SNAPSHOT'
 }
 patchPluginXml {
+    sinceBuild '193'
+    untilBuild '202'
     changeNotes """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""
